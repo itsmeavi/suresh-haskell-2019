@@ -46,5 +46,53 @@ returnEight _ = 8                                                   -- Whatever 
 -- Guarded functions
 xorGuarded :: Bool -> Bool -> Bool
 xorGuarded b1 b2
-    | b1 == b2 = False
-    | b1 /= b2 = True
+    | b1 == b2 = False                                              -- each return statement (after '=') guarded by a condition (after '|') 
+    | b1 /= b2 = True            
+
+
+greaterOrLessThan9 :: Int -> IO ()
+greaterOrLessThan9 x
+    | x >= 9 = putStrLn "greater than or equal"                     -- guards are not necessarily exhaustive (second guard falls under first)
+    | x == 9 = putStrLn "equal"                                     -- Returns first statement that matches guard.
+    | x < 9 = putStrLn "less than"                                  -- with argument 9, returns "greater than or equal"
+
+--      Non-exhaustion can leave out condition in interpret time but create error in runtime
+xorNonExhaustGuardRuntimeError :: Bool -> Bool -> Bool
+xorNonExhaustGuardRuntimeError b1 b2                                -- guards may not exhaust all combos of input
+    | b1 == True = not b2                                           -- will compile but show error at runtime
+    | b2 == False = b1                                              -- this function does not have return for b1 = False, b2 = True
+
+
+xorGuardOtherwise :: Bool -> Bool -> Bool
+xorGuardOtherwise b1 b2                                             
+    | b1 == True = not b2
+    | otherwise = b2                                                -- use otherwise to catch all condition not caught by previous guards
+
+
+-- Cases
+xorCases :: Bool -> Bool -> Bool
+xorCases b1 b2 = case b1 of                                         -- "case arg of.." is an expression returning boolean value
+                    False -> b2                                     -- It is not a statement
+                    True -> not b2
+
+--      Nested Cases
+xorNestedCases :: Bool -> Bool -> Bool
+xorNestedCases b1 b2 = case b1 of
+                        True -> case b2 of
+                                    True -> False
+                                    False -> True
+                        
+                        False -> case b2 of
+                                    True -> True
+                                    False -> False
+
+
+
+-- Multiple Inputs
+plusMultiInp :: Int -> Int -> Int
+plusMultiInp n m = n + m
+
+-- plusMultiInp n m => "plus" takes in "n", returns a function "plus n". 
+--              Then "plus n" takes in "m", returns "n + m" 
+-- Hence Int -> Int -> Int <==> Int -> (Int -> Int)
+-- Similarly when calling func x1 x2 x2 <==> (((func x1) x2) x3)
