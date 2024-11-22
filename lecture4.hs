@@ -129,3 +129,53 @@ hcf b a
 -- (/m) n <==> function that divides arg by m
 
 
+-- Local definitions
+largestDiv :: Integer -> Integer                                    -- Given n, find the largest number less than n that divides n
+largestDiv n = divSearch n (n-1)
+
+divSearch :: Integer -> Integer -> Integer                          -- Given n, m; find largest number at most m that divides n
+divSearch n m 
+    | n`mod` m == 0 = m
+    | otherwise = divSearch n (m-1)
+
+
+--      divSearch ONLY required for largestDiv, hence can define locally
+largestDiv2 :: Integer -> Integer
+largestDiv2 n = divSearchLocal n (n-1)
+            where
+            divSearchLocal :: Integer -> Integer -> Integer
+            divSearchLocal n m
+                | n `mod` m == 0 = m
+                | otherwise = divSearchLocal n (m-1)
+
+
+
+--      local definitions can use defined items inside context
+largestDiv3 :: Integer -> Integer
+largestDiv3 n = divSearchLocal (n-1)
+            where
+            divSearchLocal :: Integer -> Integer
+            divSearchLocal m
+                | n `mod` m == 0 = m
+                | otherwise = divSearchLocal $ m - 1                -- divSearchLocal $ m - 1 <==> divSearchLocal (m-1); $ used for ()
+
+
+
+
+countDigits :: Integer -> Integer
+countDigits n
+    | abs n < 10 = 1
+    | otherwise = countDigits (n `div` 10) + 1
+
+
+power :: Integer -> Integer -> Integer
+power m 0 = 1
+power m n = m * power m (n-1)
+
+
+posIntReverse :: Integer -> Integer
+posIntReverse n
+    | n < 0 = -1
+    | n < 10 = n
+    | otherwise = (n `mod` 10)*(10 `power` (countDigits n - 1)) + posIntReverse (n `div` 10)
+
