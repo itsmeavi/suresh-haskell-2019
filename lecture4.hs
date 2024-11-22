@@ -179,3 +179,16 @@ posIntReverse n
     | n < 10 = n
     | otherwise = (n `mod` 10)*(10 `power` (countDigits n - 1)) + posIntReverse (n `div` 10)
 
+
+
+
+posIntReverseAccu :: Integer -> Integer
+posIntReverseAccu n = revInto 0 n
+
+revInto :: Integer -> Integer -> Integer
+revInto a n
+    | n == 0 = a
+    | otherwise = 
+        let (q,r) = divMod n 10
+        in
+        revInto ((a*10) + r) q
