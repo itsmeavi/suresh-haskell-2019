@@ -197,3 +197,40 @@ revInto a n
 
 -------------------------------- Lecture 6 ------------------------------------
 
+-- Lists
+--  type of list of type T is [T]
+--  a:[b, c, d] = [a, b, c, d]
+--  [a, b, c, d] = a: (b :(c: (d: [])))
+--  head [a, b, c, d] = a
+--  tail [a, b, c, d] = [b, c, d]
+
+--  adds one to every member
+addOne :: [Int] -> [Int]
+addOne l    
+    | null l = []
+    | otherwise = (head l + 1) : addOne (tail l)
+
+
+--  length of integer list
+lenIntList :: [Int] -> Int
+lenIntList l
+    | null l = 0
+    | otherwise = 1 + lenIntList (tail l)
+
+--      uses pattern matching
+lenIntListPattern :: [Int] -> Int
+lenIntListPattern [] = 0
+lenIntListPattern (x:xs) = 1 + lenIntListPattern (xs)
+
+
+addAtEnd :: Int -> [Int] -> [Int]
+addAtEnd x [] = x:[]
+addAtEnd x l = (head l):(addAtEnd x (tail l))
+
+addAtEndPattern :: Int -> [Int] -> [Int]
+addAtEndPattern y [] = y:[]
+addAtEndPattern y (x:xs) = x:(addAtEndPattern y (xs))
+
+attach :: [Int] -> [Int] -> [Int]                                   -- Built-in function '++'
+attach [] l2 = l2
+attach (x:xs) l2 = x:(attach (xs) l2)
