@@ -234,3 +234,53 @@ addAtEndPattern y (x:xs) = x:(addAtEndPattern y (xs))
 attach :: [Int] -> [Int] -> [Int]                                   -- Built-in function '++'
 attach [] l2 = l2
 attach (x:xs) l2 = x:(attach (xs) l2)
+
+
+valueAtPos :: [Int] -> Int -> Int
+--valueAtPos [] i = -1
+valueAtPos (x:xs) 0 = x
+valueAtPos (y:ys) i = valueAtPos (ys) (i-1)
+
+-- Throwing error
+
+valueAtPosWithError :: [Int] -> Int -> Int                          -- Built-in function "!!"
+valueAtPosWithError l i 
+    | null l = error "Empty List"
+    | i < 0 = error "Negative Index"
+    | i > ((lenIntList l) - 1) = error "Out of scope index"
+    | otherwise = valueAtPos l i 
+
+
+--      List notations
+-- [m..n] = [m, m+1, m+2,..., n]
+--      [m..n] = [] --------------> n < m
+-- [a,a+d..n] = [a, a+d, a+2d, ..., ~n] --------> may be decreasing seq (d<0)
+--      [100, 98.. 80] = [100,98,96,94,92,90,88,86,84,82,80]
+
+
+--      Reverse list
+revList :: [Int] -> [Int]                                           -- Built-in function "reverse"
+revList [] = []
+revList (x:xs) = (revList (xs))++[x]
+
+-- Reverse using accumulator
+
+revListAccum :: [Int] -> [Int]                                      -- this is how reverse works
+revListAccum l = listRevAccum l []
+            where
+            listRevAccum :: [Int] -> [Int] -> [Int]
+            listRevAccum [] l = l
+            listRevAccum (x:xs) l = listRevAccum (xs) (x:l)
+
+
+
+
+--      Some other built-in functions over lists
+-- sum list = sum over all elements of the list
+-- init list = list of all the elements of list except last
+-- last list = last element
+-- head list = first element
+-- tail list = all last ements but first
+-- take n l = returns first n elements of l; if n > max index of l, the whole l
+-- drop n l = returns all but first n elemetns; if n > max index of l, empty []
+-- take n l ++ drop n l = l
