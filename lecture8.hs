@@ -323,3 +323,23 @@ capitalize [x] = (toUpper x):[]
 capitalize (a:as) = (toUpper a):(capitalize (as))
 
 
+position :: Char -> String -> Maybe Integer
+position _ "" = Nothing
+position c (x:xs) 
+    | c == x = Just 0
+    | otherwise = case (position c (xs)) of
+                    Nothing -> Nothing
+                    Just i -> Just (i+1)
+
+
+
+
+wordc :: String -> Integer
+wordc "" = 0
+wordc s = counter 0 s + 1
+        where
+        counter :: Integer -> String -> Integer
+        counter c "" = c
+        counter c (x:xs)
+            | x==' ' || x=='\t' || x=='\n' = counter (c+1) (xs)
+            | otherwise = counter c (xs)
