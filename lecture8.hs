@@ -332,14 +332,38 @@ position c (x:xs)
                     Just i -> Just (i+1)
 
 
-
-
-wordc :: String -> Integer
-wordc "" = 0
-wordc s = counter 0 s + 1
-        where
+wordc :: String -> Integer                                          -- counts number of words in string
+wordc s = counter 0 s + 1                                           -- wrong: counts consecutive spaces
+        where                                                       -- wordc "ab   c" = 4
         counter :: Integer -> String -> Integer
         counter c "" = c
         counter c (x:xs)
-            | x==' ' || x=='\t' || x=='\n' = counter (c+1) (xs)
-            | otherwise = counter c (xs)
+            | isSpace x = counter (c+1) xs
+            | otherwise = counter c xs
+
+
+
+--          Corrected word count
+wordc2 :: String -> Integer                                         
+--wordc "" = 0
+wordc2 s = counter 0 (' ':s) + 1                                    
+        where
+        counter :: Integer -> String -> Integer
+        --counter c [x]
+        counter c [x] = c
+        counter c (x:y:ys)
+            | isSpace y && isSpace x = counter c (y:ys)
+            | isSpace y && not (isSpace x) = counter (c+1) (y:ys)
+            | otherwise = counter c (y:ys)
+
+
+
+
+-- Tuples
+--      look up marks of a name
+type MarksList = [(String, Integer)]
+lookUpMarks :: String -> MarksList -> Maybe Integer
+lookUpMarks _ [] = Nothing
+lookUpMarks n ((name,marks):ml)
+    | n==name = Just marks
+    | otherwise = lookUpMarks n ml
