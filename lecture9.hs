@@ -438,13 +438,24 @@ allEvensList (x:xs)
 -- filter :: (a -> Bool) -> [a] -> [a]
 -- For example, allEvensList l <==> filter even l
 
+myFilter :: (a -> Bool) -> [a] -> [a]
+myFilter _ [] = []
+myFilter p (x:xs) 
+        | p x = x:(myFilter p (xs))
+        | otherwise = (myFilter p xs)
+
 
 --      Combine map and filter
 squaresOfEven :: [Integer] -> [Integer]
 squaresOfEven l = map (^2) (filter even l)
 
-capitalizeVowels :: String -> String
-capitalizeVowels s = map toUpper (filter isVowel s)
-                    where
-                    isVowel :: Char -> Bool
-                    isVowel c = c `elem` "aeiou"
+extractCapitalizeVowels :: String -> String
+extractCapitalizeVowels s = map toUpper (filter isVowel s)
+                        where
+                        isVowel :: Char -> Bool
+                        isVowel c = c `elem` "aeiou"
+
+isVowel :: Char -> Bool
+isVowel c = c `elem` "aeiou"
+extractAndCapVowsCompose :: String -> String
+extractAndCapVowsCompose = map toUpper . filter isVowel             -- composition operation (f . g) e <==> f(g e)
